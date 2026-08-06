@@ -25,7 +25,7 @@ export function Hero() {
     return () => clearInterval(id);
   }, []);
 
-  const slide = slides[index];
+  const slide = slides[index]!;
 
   return (
     <section id="top" className="border-b border-border bg-primary text-primary-foreground">
