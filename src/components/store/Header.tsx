@@ -97,8 +97,9 @@ export function Header() {
           </a>
 
           {/* Buscador global */}
-          <div className="ml-2 hidden flex-1 items-center md:flex">
-            <div className="flex w-full max-w-2xl items-center rounded-md border border-border bg-background focus-within:border-brand focus-within:ring-2 focus-within:ring-ring/30">
+          <div className="hidden flex-1 items-center md:flex">
+            <div className="flex w-full max-w-xl items-center rounded-md border border-border bg-background focus-within:border-brand focus-within:ring-2 focus-within:ring-ring/30">
+
               <Select value={scope} onValueChange={setScope}>
                 <SelectTrigger className="h-10 w-44 shrink-0 rounded-l-md rounded-r-none border-0 border-r border-border bg-transparent text-xs shadow-none focus-visible:ring-0">
                   <SelectValue placeholder="Categoría" />
