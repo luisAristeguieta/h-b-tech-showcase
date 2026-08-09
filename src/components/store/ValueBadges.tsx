@@ -3,42 +3,41 @@ import { CreditCard, Cpu, ShieldCheck, Truck } from "lucide-react";
 const badges = [
   {
     icon: Truck,
-    title: "Envíos a todo el Ecuador",
-    text: "Despacho en 24-72 h a las 24 provincias.",
+    title: "Envíos Seguros",
+    text: "Despacho rápido a nivel nacional.",
   },
   {
     icon: Cpu,
-    title: "Asesoramiento Técnico",
-    text: "Ingenieros que dimensionan tu equipo ideal.",
+    title: "Asesoría Experta",
+    text: "Atención personalizada para ti.",
   },
   {
     icon: ShieldCheck,
-    title: "Garantía Oficial Directa",
-    text: "Respaldo de fábrica y servicio técnico local.",
+    title: "Garantía Oficial",
+    text: "Equipos con respaldo de fábrica.",
   },
   {
     icon: CreditCard,
-    title: "Pagos 100% Seguros",
-    text: "Tarjetas, transferencias y crédito directo.",
+    title: "Pagos Confiables",
+    text: "Transacciones seguras y rápidas.",
   },
 ];
 
 export function ValueBadges() {
   return (
-    <section className="border-b border-border bg-surface">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
-        {badges.map((b) => (
-          <div key={b.title} className="group flex gap-4 bg-surface p-6">
-            <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-border bg-background text-brand transition-colors group-hover:border-brand">
-              <b.icon className="h-5 w-5" />
-              <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-cyan" />
-            </span>
-            <div>
-              <p className="text-sm font-bold text-primary">{b.title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{b.text}</p>
+    <section className="bg-white dark:bg-slate-950 py-12 lg:py-20 border-b border-slate-100 dark:border-slate-800">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {badges.map((b) => (
+            <div key={b.title} className="group text-center">
+              <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-900 transition-colors group-hover:bg-brand/10">
+                <b.icon className="h-10 w-10 text-brand" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">{b.title}</h3>
+              <p className="text-sm text-muted-foreground">{b.text}</p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

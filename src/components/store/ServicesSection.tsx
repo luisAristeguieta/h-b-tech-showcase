@@ -54,7 +54,7 @@ export function ServicesSection() {
               ))}
             </ul>
             <Button variant="ghost" className="mt-5 w-fit gap-1.5 px-0 text-brand" asChild>
-              <a href="#cotizar">
+              <a href="/cotizar">
                 Solicitar servicio <ArrowRight className="h-4 w-4" />
               </a>
             </Button>

@@ -5,16 +5,16 @@ import { CartDrawer } from "@/components/store/CartDrawer";
 import { Header } from "@/components/store/Header";
 import { Hero } from "@/components/store/Hero";
 import { ValueBadges } from "@/components/store/ValueBadges";
+import { MainShowcase } from "@/components/store/MainShowcase";
 import { CategoryGrid } from "@/components/store/CategoryGrid";
 import { FeaturedProducts } from "@/components/store/FeaturedProducts";
-import { AboutSection } from "@/components/store/AboutSection";
-import { ServicesSection } from "@/components/store/ServicesSection";
-import { ContactSection } from "@/components/store/ContactSection";
+import { Testimonials } from "@/components/store/Testimonials";
 import { Footer } from "@/components/store/Footer";
+import { WhatsAppFloat } from "@/components/store/WhatsAppFloat";
 
 const title = "IMPORTACIONES H&B | Tecnología importada en Ecuador";
 const description =
-  "Importación directa de laptops, desktops, monitores, componentes, POS y videovigilancia. Envíos a todo el Ecuador con garantía oficial y asesoría técnica.";
+  "Importación directa de electrónica, cables, cargadores, mouse, teclados, routers y accesorios. Envíos a todo el Ecuador con garantía oficial y atención personalizada.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,20 +34,21 @@ function Index() {
   return (
     <CartProvider>
       <div className="min-h-screen bg-background">
-        <Header />
+        <Header activeTab="INICIO" />
         <main>
           <Hero />
           <ValueBadges />
+          <MainShowcase />
           <CategoryGrid />
           <FeaturedProducts />
-          <AboutSection />
-          <ServicesSection />
-          <ContactSection />
+          <Testimonials />
         </main>
         <Footer />
         <CartDrawer />
+        <WhatsAppFloat />
         <Toaster />
       </div>
     </CartProvider>
   );
 }
+

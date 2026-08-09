@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CatalogoRouteImport } from './routes/catalogo'
+import { Route as CategoriasRouteImport } from './routes/categorias'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as CotizarRouteImport } from './routes/cotizar'
+import { Route as CuentaRouteImport } from './routes/cuenta'
+import { Route as MiCuentaRouteImport } from './routes/mi-cuenta'
+import { Route as NosotrosRouteImport } from './routes/nosotros'
+import { Route as OfertasRouteImport } from './routes/ofertas'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatalogoRoute = CatalogoRouteImport.update({
+  id: '/catalogo',
+  path: '/catalogo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriasRoute = CategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CotizarRoute = CotizarRouteImport.update({
+  id: '/cotizar',
+  path: '/cotizar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CuentaRoute = CuentaRouteImport.update({
+  id: '/cuenta',
+  path: '/cuenta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MiCuentaRoute = MiCuentaRouteImport.update({
+  id: '/mi-cuenta',
+  path: '/mi-cuenta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NosotrosRoute = NosotrosRouteImport.update({
+  id: '/nosotros',
+  path: '/nosotros',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfertasRoute = OfertasRouteImport.update({
+  id: '/ofertas',
+  path: '/ofertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/catalogo': typeof CatalogoRoute
+  '/categorias': typeof CategoriasRoute
+  '/contacto': typeof ContactoRoute
+  '/cotizar': typeof CotizarRoute
+  '/cuenta': typeof CuentaRoute
+  '/mi-cuenta': typeof MiCuentaRoute
+  '/nosotros': typeof NosotrosRoute
+  '/ofertas': typeof OfertasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/catalogo': typeof CatalogoRoute
+  '/categorias': typeof CategoriasRoute
+  '/contacto': typeof ContactoRoute
+  '/cotizar': typeof CotizarRoute
+  '/cuenta': typeof CuentaRoute
+  '/mi-cuenta': typeof MiCuentaRoute
+  '/nosotros': typeof NosotrosRoute
+  '/ofertas': typeof OfertasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/catalogo': typeof CatalogoRoute
+  '/categorias': typeof CategoriasRoute
+  '/contacto': typeof ContactoRoute
+  '/cotizar': typeof CotizarRoute
+  '/cuenta': typeof CuentaRoute
+  '/mi-cuenta': typeof MiCuentaRoute
+  '/nosotros': typeof NosotrosRoute
+  '/ofertas': typeof OfertasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/catalogo'
+    | '/categorias'
+    | '/contacto'
+    | '/cotizar'
+    | '/cuenta'
+    | '/mi-cuenta'
+    | '/nosotros'
+    | '/ofertas'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/catalogo'
+    | '/categorias'
+    | '/contacto'
+    | '/cotizar'
+    | '/cuenta'
+    | '/mi-cuenta'
+    | '/nosotros'
+    | '/ofertas'
+  id:
+    | '__root__'
+    | '/'
+    | '/catalogo'
+    | '/categorias'
+    | '/contacto'
+    | '/cotizar'
+    | '/cuenta'
+    | '/mi-cuenta'
+    | '/nosotros'
+    | '/ofertas'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CatalogoRoute: typeof CatalogoRoute
+  CategoriasRoute: typeof CategoriasRoute
+  ContactoRoute: typeof ContactoRoute
+  CotizarRoute: typeof CotizarRoute
+  CuentaRoute: typeof CuentaRoute
+  MiCuentaRoute: typeof MiCuentaRoute
+  NosotrosRoute: typeof NosotrosRoute
+  OfertasRoute: typeof OfertasRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,12 +156,86 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/catalogo': {
+      id: '/catalogo'
+      path: '/catalogo'
+      fullPath: '/catalogo'
+      preLoaderRoute: typeof CatalogoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categorias': {
+      id: '/categorias'
+      path: '/categorias'
+      fullPath: '/categorias'
+      preLoaderRoute: typeof CategoriasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cotizar': {
+      id: '/cotizar'
+      path: '/cotizar'
+      fullPath: '/cotizar'
+      preLoaderRoute: typeof CotizarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cuenta': {
+      id: '/cuenta'
+      path: '/cuenta'
+      fullPath: '/cuenta'
+      preLoaderRoute: typeof CuentaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mi-cuenta': {
+      id: '/mi-cuenta'
+      path: '/mi-cuenta'
+      fullPath: '/mi-cuenta'
+      preLoaderRoute: typeof MiCuentaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nosotros': {
+      id: '/nosotros'
+      path: '/nosotros'
+      fullPath: '/nosotros'
+      preLoaderRoute: typeof NosotrosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ofertas': {
+      id: '/ofertas'
+      path: '/ofertas'
+      fullPath: '/ofertas'
+      preLoaderRoute: typeof OfertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CatalogoRoute: CatalogoRoute,
+  CategoriasRoute: CategoriasRoute,
+  ContactoRoute: ContactoRoute,
+  CotizarRoute: CotizarRoute,
+  CuentaRoute: CuentaRoute,
+  MiCuentaRoute: MiCuentaRoute,
+  NosotrosRoute: NosotrosRoute,
+  OfertasRoute: OfertasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -37,10 +37,10 @@ export function ContactSection() {
 
           <div className="mt-8 space-y-4">
             {[
-              { icon: MapPin, text: "Av. Amazonas N34-120 y República, Quito — Ecuador" },
-              { icon: Phone, text: "(02) 234 5678 · WhatsApp +593 98 765 4321" },
-              { icon: Mail, text: "ventas@importacioneshyb.ec" },
-              { icon: Clock, text: "Lun a Vie 09:00 – 18:30 · Sáb 09:00 – 13:00" },
+              { icon: MapPin, text: "Fernando Dávalos OE5-107 y Machala. Quito - Ecuador" },
+              { icon: Phone, text: "099 907 5802 · WhatsApp +593 99 907 5802" },
+              { icon: Mail, text: "admin@hybimportaciones.ec" },
+              { icon: Clock, text: "Lun a Vie 09:00 – 18:00 · Sáb 09:00 – 13:00" },
             ].map((i) => (
               <div key={i.text} className="flex items-start gap-3">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-background text-brand">
