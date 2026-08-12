@@ -1,84 +1,62 @@
-# H&B Tech Showcase
+# ⚡ Importaciones H&B - E-Commerce & Tech Showcase
 
-Crea un prototipo funcional en React + TypeScript usando Vite, Tailwind CSS y shadcn/ui. 
+> 🎓 **Nota Académica / Educativa:** Este proyecto ha sido desarrollado exclusivamente con **fines educativos y demostrativos** para proyectos de desarrollo de software académico. Las marcas, nombres y productos presentados se utilizan a modo de prototipo interactivo para simular el funcionamiento real de una plataforma de comercio electrónico.
 
-Utiliza únicamente datos quemados (hardcoded), sin APIs ni backend.
+---
 
-Configura la identidad visual e institucionales de la plataforma para la marca "IMPORTACIONES H&B". Esta marca se especializa en la importación y distribución de tecnología, electrónica y soluciones digitales, reflejando confianza, conexión y vanguardia tecnológica (basado en su logotipo de apretón de manos con trazos de circuito).
+Plataforma web e-commerce interactiva desarrollada como prototipo para **Importaciones H&B**, orientada a la venta y distribución de componentes electrónicos, módulos, sensores y robótica.
 
-Implementa estrictamente la siguiente paleta de colores corporativa (los códigos HEX deben usarse para backgrounds, bordes y acentos):
+El sistema ofrece una experiencia de compra moderna, dinámica y segura, integrando herramientas de contacto directo, validación de datos en compras y promociones dinámicas.
 
-- Azul Principal (Marca/Textos): #0378A6 (un azul profundo y profesional)
+---
 
-- Azul Vibrante (Iconos/Acentos): #05AFF2 (azul eléctrico)
+## 🚀 Novedades y Funcionalidades Recientes
 
-- Cyan Claro (Hover/Acentos secundarios): #05C7F2 y #05DBF2 (cyan brillante)
+* **📱 Canales de Contacto Flotantes:** Integración de botones flotantes interactivos de redes sociales y atención inmediata vía WhatsApp para soporte directo al cliente.
+* **🔒 Validaciones en Registro y Facturación:** Validación en tiempo real para cajas de texto en los formularios de creación de cliente y emisión de datos de facturación (previniendo errores en campos de identificación, correos y dirección).
+* **🎟️ Sistema de Códigos Promocionales:** Módulo en el carrito de compras que permite ingresar cupones de descuento, aplicando y reflejando la rebaja automáticamente en el desglose final del pedido.
 
-- Fondo / Neutro: #F2F2F2 (gris muy claro)
+---
 
-Diseña una plataforma E-commerce y catálogo corporativo moderno, confiable, limpio, elegante y responsive, priorizando el buen uso del espacio, sin degradados y con componentes reutilizables.
+## ✨ Características Principales
 
-La web debe incluir los siguientes componentes y secciones principales:
+* **Landing Page & Hero Slider:** Banner principal panorámico e interactivo con promociones y llamados a la acción (CTA).
+* **Catálogo de Productos & Filtros:** Exploración de componentes por categorías (robótica, sensores, módulos, etc.) con búsqueda en tiempo real.
+* **Carrito de Compras & Cotizaciones:** Cálculo transparente de costos, cupones de descuento y carrito interactivo.
+* **Módulo de Facturación & Datos de Cliente:** Proceso de checkout optimizado con validación rigurosa de entradas.
+* **Panel de Navegación SPA:** Transiciones instantáneas entre secciones (`/`, `/catalogo`, `/login`, etc.) mediante React Router.
 
-1. Header & Navegación:
+---
 
-   - Topbar superior con info de contacto (WhatsApp de Ventas, Teléfono, Envíos a todo el Ecuador, enlace a Garantías).
+## 🛠️ Tecnologías Utilizadas
 
-   - Navbar principal con el logo de "IMPORTACIONES H&B" (apretón de manos tecnológico), buscador global de productos con filtro por categoría, botón de "Mi Cuenta", botón de "Cotizar" y un Carrito de Compras (drawer/slide-over colapsable).
+* **Frontend:** React, Tailwind CSS, Vite.
+* **Enrutamiento:** React Router (Single Page Application).
+* **Iconos & UI:** Lucide React / FontAwesome, componentes estilizados.
+* **Control de Versiones:** Git / GitHub (`h-b-tech-showcase`).
 
-   - Menú de categorías desplegable: Laptops, Desktops, Monitores, Componentes (Procesadores, GPUs, RAM), Impresoras & POS, Videovigilancia y Protección Eléctrica.
+---
 
-2. Hero Section:
+## 📦 Instalación y Configuración Local
 
-   - Banner principal rotativo/destacado promoviendo "Importación Directa de Tecnología de Vanguardia" y "Soluciones Corporativas y para Gamers".
+Sigue estos pasos para ejecutar la aplicación en tu entorno local:
 
-   - Botones Call to Action claros: "Explorar Catálogo" y "Solicitar Asesoría".
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/luisAristeguieta/h-b-tech-showcase.git
+cd h-b-tech-showcase
 
-3. Secciones del Home:
+## 💻 Vista General y Comercio
+| Página de Inicio (Landing) | Catálogo de Productos |
+| :---: | :---: |
+| ![Landing Page](./docs/screenshots/home.png) | ![Catálogo](./docs/screenshots/catalog.png) |
 
-   - Badges de Valor con iconos de circuito sutiles: "Envíos a todo el Ecuador", "Asesoramiento Técnico Especializado", "Garantía Oficial Directa" y "Pagos 100% Seguros".
+### 🛒 Detalle y Proceso de Compra
+| Detalle del Producto | Carrito de Compras |
+| :---: | :---: |
+| ![Detalle](./docs/screenshots/product-detail.png) | ![Carrito](./docs/screenshots/cart.png) |
 
-   - Categorías en Tendencia: Grid con tarjetas visuales.
-
-   - Grid de Productos Destacados / Recién Llegados: Tarjetas de producto que incluyan imagen (placeholder), título (ej. "Mini PC HP Pro", "Laptop Lenovo ThinkCentre", "Monitor Gamer 27''"), especificaciones rápidas, precio anterior, precio de oferta, badge de descuento y botones para "Añadir al Carrito" o "Cotizar por WhatsApp".
-
-4. Secciones Informativas y de Servicios:
-
-   - Sección "Acerca de IMPORTACIONES H&B": Resumen corporativo (Conectando a Ecuador con la mejor tecnología mundial, reflejando el apretón de manos del logo como símbolo de confianza y alianza técnica).
-
-   - Sección de Asesoría y Servicios: Tarjetas para Soporte Técnico, Venta Corporativa y Equipamiento POS.
-
-   - Formulario de Contacto / Cotización Rápida: Campos para Nombre, Correo, Teléfono, Ciudad y Mensaje.
-
-5. Módulos Interactivos (Frontend Hardcoded):
-
-   - Modal de Vista Rápida de Producto (Quick View) con detalle de especificaciones técnicas.
-
-   - Carrito de Compras lateral funcional en memoria (sumar/restar cantidades, calcular subtotal y botón para simular checkout o enviar pedido a WhatsApp).
-
-6. Footer Corporativo:
-
-   - Dirección física en Quito, horarios de atención, enlaces de navegación, redes sociales y métodos de pago aceptados.
-
-Prioriza una excelente experiencia de usuario (UI/UX) y organiza el código modular reutilizable por componentes (Header, ProductCard, CategoryGrid, CartDrawer, QuickViewModal, Footer) para facilitar futuras integraciones de datos reales.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/4bfd5807-094e-4635-9b6f-906cb6f120bf).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+### 🔐 Vista de Cliente / Usuario:
+| Vista de Cliente |
+| :---: |
+| ![Cliente](./docs/screenshots/client-view.png) |
