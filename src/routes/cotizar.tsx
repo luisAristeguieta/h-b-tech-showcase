@@ -20,7 +20,14 @@ import {
   Send,
   CheckCircle2,
   Sparkles,
+  AlertCircle,
 } from "lucide-react";
+import {
+  validateEmail,
+  validatePhone,
+  validateEcuadorId,
+  validateText,
+} from "@/lib/validation";
 
 const title = "Solicitar Cotización | IMPORTACIONES H&B Ecuador";
 const description =
@@ -65,9 +72,29 @@ const serviceTypes = [
   },
 ];
 
+interface CotizarFormData {
+  nombre: string;
+  empresa: string;
+  ruc: string;
+  telefono: string;
+  email: string;
+  ciudad: string;
+  detalles: string;
+}
+
+interface CotizarFormErrors {
+  nombre?: string;
+  empresa?: string;
+  ruc?: string;
+  telefono?: string;
+  email?: string;
+  ciudad?: string;
+  detalles?: string;
+}
+
 function CotizarPage() {
   const [selectedService, setSelectedService] = useState<string>("corporativo");
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CotizarFormData>({
     nombre: "",
     empresa: "",
     ruc: "",
@@ -76,33 +103,74 @@ function CotizarPage() {
     ciudad: "Quito",
     detalles: "",
   });
+  const [formErrors, setFormErrors] = useState<CotizarFormErrors>({});
+
+  const validateForm = (): boolean => {
+    const errors: CotizarFormErrors = {};
+
+    const nameVal = validateText(formData.nombre, 3, "El nombre");
+    if (!nameVal.isValid) {
+      errors.nombre = nameVal.error || "Ingresa tu nombre completo (mínimo 3 caracteres).";
+    }
+
+    const phoneVal = validatePhone(formData.telefono);
+    if (!phoneVal.isValid) {
+      errors.telefono = phoneVal.error || "Ingresa un teléfono válido (ej. 0987654321).";
+    }
+
+    if (formData.email.trim()) {
+      const emailVal = validateEmail(formData.email);
+      if (!emailVal.isValid) {
+        errors.email = emailVal.error || "Ingresa un correo electrónico válido.";
+      }
+    }
+
+    if (formData.ruc.trim()) {
+      const rucVal = validateEcuadorId(formData.ruc);
+      if (!rucVal.isValid) {
+        errors.ruc = rucVal.error || "Ingresa una Cédula (10 d) o RUC (13 d) válido.";
+      }
+    }
+
+    setFormErrors(errors);
+    const firstError = Object.values(errors).find(Boolean);
+    if (firstError) {
+      toast.error("Por favor revisa los campos requeridos.", {
+        description: firstError,
+      });
+      return false;
+    }
+    return true;
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    const errorKey = name as keyof CotizarFormErrors;
+    if (formErrors[errorKey]) {
+      setFormErrors((prev) => ({ ...prev, [errorKey]: undefined }));
+    }
   };
 
   const handleWhatsAppSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.nombre || !formData.telefono) {
-      toast.error("Por favor completa al menos tu nombre y número de teléfono.");
-      return;
-    }
+    if (!validateForm()) return;
 
     const serviceObj = serviceTypes.find((s) => s.id === selectedService);
     const text = `*SOLICITUD DE COTIZACIÓN - IMPORTACIONES H&B*
 ---------------------------------------
 📌 *Servicio:* ${serviceObj?.title || selectedService}
-👤 *Cliente:* ${formData.nombre}
-🏢 *Empresa:* ${formData.empresa || "Particular"}
-🆔 *RUC/CI:* ${formData.ruc || "N/A"}
-📱 *Teléfono:* ${formData.telefono}
-📧 *Email:* ${formData.email || "N/A"}
-📍 *Ciudad:* ${formData.ciudad}
+👤 *Cliente:* ${formData.nombre.trim()}
+🏢 *Empresa:* ${formData.empresa.trim() || "Particular"}
+🆔 *RUC/CI:* ${formData.ruc.trim() || "N/A"}
+📱 *Teléfono:* ${formData.telefono.trim()}
+📧 *Email:* ${formData.email.trim() || "N/A"}
+📍 *Ciudad:* ${formData.ciudad.trim()}
 ---------------------------------------
 📝 *Detalles de la Cotización:*
-${formData.detalles || "Solicito cotización y asesoría general."}`;
+${formData.detalles.trim() || "Solicito cotización y asesoría general de catálogo."}`;
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
@@ -111,11 +179,11 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
 
   const handleDirectSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.nombre || !formData.telefono) {
-      toast.error("Por favor completa tu nombre y número de teléfono.");
-      return;
-    }
-    toast.success("¡Cotización recibida! Un asesor de H&B te contactará en breve.");
+    if (!validateForm()) return;
+
+    toast.success("¡Cotización recibida con éxito!", {
+      description: `Gracias ${formData.nombre.trim()}, un asesor especializado te contactará a la brevedad.`,
+    });
     setFormData({
       nombre: "",
       empresa: "",
@@ -125,6 +193,7 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
       ciudad: "Quito",
       detalles: "",
     });
+    setFormErrors({});
   };
 
   return (
@@ -198,12 +267,25 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
                 </div>
               </div>
 
-              <form className="mt-8 space-y-6">
+              <form className="mt-8 space-y-6" noValidate>
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="nombre" className="text-xs font-bold uppercase text-primary">
-                      Nombre Completo *
-                    </Label>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="nombre" className="text-xs font-bold uppercase text-primary">
+                        Nombre Completo <span className="text-rose-600">*</span>
+                      </Label>
+                      {formData.nombre && (
+                        <span
+                          className={`text-[10px] font-semibold ${
+                            formData.nombre.trim().length >= 3
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-amber-500"
+                          }`}
+                        >
+                          {formData.nombre.trim().length >= 3 ? "✓ Válido" : "Mínimo 3 letras"}
+                        </span>
+                      )}
+                    </div>
                     <Input
                       id="nombre"
                       name="nombre"
@@ -211,13 +293,34 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
                       onChange={handleChange}
                       placeholder="Ej. Ing. Carlos Mendoza"
                       required
+                      className={`text-xs h-11 rounded-xl transition-colors ${
+                        formErrors.nombre ? "border-rose-500 ring-1 ring-rose-500" : ""
+                      }`}
                     />
+                    {formErrors.nombre && (
+                      <p className="text-[11px] font-semibold text-rose-500 flex items-center gap-1">
+                        <AlertCircle className="h-3 w-3" /> {formErrors.nombre}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="telefono" className="text-xs font-bold uppercase text-primary">
-                      Teléfono / WhatsApp *
-                    </Label>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="telefono" className="text-xs font-bold uppercase text-primary">
+                        Teléfono / WhatsApp <span className="text-rose-600">*</span>
+                      </Label>
+                      {formData.telefono && (
+                        <span
+                          className={`text-[10px] font-semibold ${
+                            validatePhone(formData.telefono).isValid
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-amber-500"
+                          }`}
+                        >
+                          {validatePhone(formData.telefono).isValid ? "✓ Formato válido" : "Ej. 0987654321"}
+                        </span>
+                      )}
+                    </div>
                     <Input
                       id="telefono"
                       name="telefono"
@@ -225,12 +328,20 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
                       onChange={handleChange}
                       placeholder="Ej. 0987654321"
                       required
+                      className={`text-xs h-11 rounded-xl transition-colors ${
+                        formErrors.telefono ? "border-rose-500 ring-1 ring-rose-500" : ""
+                      }`}
                     />
+                    {formErrors.telefono && (
+                      <p className="text-[11px] font-semibold text-rose-500 flex items-center gap-1">
+                        <AlertCircle className="h-3 w-3" /> {formErrors.telefono}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="empresa" className="text-xs font-bold uppercase text-primary">
-                      Empresa / Institución
+                      Empresa / Institución (Opcional)
                     </Label>
                     <Input
                       id="empresa"
@@ -238,26 +349,65 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
                       value={formData.empresa}
                       onChange={handleChange}
                       placeholder="Ej. Corporación Tech S.A."
+                      className="text-xs h-11 rounded-xl"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="ruc" className="text-xs font-bold uppercase text-primary">
-                      RUC o Cédula
-                    </Label>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="ruc" className="text-xs font-bold uppercase text-primary">
+                        RUC o Cédula (Opcional)
+                      </Label>
+                      {formData.ruc && (
+                        <span
+                          className={`text-[10px] font-semibold ${
+                            validateEcuadorId(formData.ruc).isValid
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-amber-500"
+                          }`}
+                        >
+                          {validateEcuadorId(formData.ruc).isValid
+                            ? validateEcuadorId(formData.ruc).type === "ruc"
+                              ? "✓ RUC Válido"
+                              : "✓ Cédula Válida"
+                            : "10 o 13 dígitos"}
+                        </span>
+                      )}
+                    </div>
                     <Input
                       id="ruc"
                       name="ruc"
                       value={formData.ruc}
                       onChange={handleChange}
                       placeholder="Ej. 1792345678001"
+                      className={`text-xs h-11 rounded-xl transition-colors ${
+                        formErrors.ruc ? "border-rose-500 ring-1 ring-rose-500" : ""
+                      }`}
                     />
+                    {formErrors.ruc && (
+                      <p className="text-[11px] font-semibold text-rose-500 flex items-center gap-1">
+                        <AlertCircle className="h-3 w-3" /> {formErrors.ruc}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-xs font-bold uppercase text-primary">
-                      Correo Electrónico
-                    </Label>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="email" className="text-xs font-bold uppercase text-primary">
+                        Correo Electrónico (Opcional)
+                      </Label>
+                      {formData.email && (
+                        <span
+                          className={`text-[10px] font-semibold ${
+                            validateEmail(formData.email).isValid
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-rose-500"
+                          }`}
+                        >
+                          {validateEmail(formData.email).isValid ? "✓ Válido" : "✗ Incorrecto"}
+                        </span>
+                      )}
+                    </div>
                     <Input
                       id="email"
                       name="email"
@@ -265,7 +415,15 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="ejemplo@empresa.com"
+                      className={`text-xs h-11 rounded-xl transition-colors ${
+                        formErrors.email ? "border-rose-500 ring-1 ring-rose-500" : ""
+                      }`}
                     />
+                    {formErrors.email && (
+                      <p className="text-[11px] font-semibold text-rose-500 flex items-center gap-1">
+                        <AlertCircle className="h-3 w-3" /> {formErrors.email}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -278,6 +436,7 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
                       value={formData.ciudad}
                       onChange={handleChange}
                       placeholder="Quito, Guayaquil, Cuenca..."
+                      className="text-xs h-11 rounded-xl"
                     />
                   </div>
                 </div>
@@ -293,6 +452,7 @@ ${formData.detalles || "Solicito cotización y asesoría general."}`;
                     value={formData.detalles}
                     onChange={handleChange}
                     placeholder="Describe las cantidades, modelos, especificaciones técnicas o soporte necesario..."
+                    className="text-xs rounded-xl"
                   />
                 </div>
 

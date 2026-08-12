@@ -4,10 +4,23 @@ import type { Product } from "@/data/catalog";
 
 export type CartLine = { product: Product; qty: number };
 
+export type AppliedCoupon = {
+  code: string;
+  percent?: number;
+  fixed?: number;
+  label: string;
+};
+
 type CartContextValue = {
   lines: CartLine[];
   count: number;
   subtotal: number;
+  savings: number;
+  originalSubtotal: number;
+  coupon: AppliedCoupon | null;
+  couponDiscount: number;
+  subtotalAfterCoupon: number;
+  iva: number;
   total: number;
   isOpen: boolean;
   setOpen: (open: boolean) => void;
@@ -16,14 +29,18 @@ type CartContextValue = {
   decrement: (id: string) => void;
   remove: (id: string) => void;
   clear: () => void;
+  applyCoupon: (code: string) => { success: boolean; message: string };
+  removeCoupon: () => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "hb_tech_cart_v2";
+const COUPON_STORAGE_KEY = "hb_tech_coupon_v1";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
+  const [coupon, setCoupon] = useState<AppliedCoupon | null>(null);
   const [isOpen, setOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -38,6 +55,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
             setLines(parsed);
           }
         }
+        const savedCoupon = localStorage.getItem(COUPON_STORAGE_KEY);
+        if (savedCoupon) {
+          setCoupon(JSON.parse(savedCoupon));
+        }
       }
     } catch {
       // ignore
@@ -51,11 +72,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (isLoaded && typeof window !== "undefined") {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
+        if (coupon) {
+          localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(coupon));
+        } else {
+          localStorage.removeItem(COUPON_STORAGE_KEY);
+        }
       } catch {
         // ignore
       }
     }
-  }, [lines, isLoaded]);
+  }, [lines, coupon, isLoaded]);
 
   const value = useMemo<CartContextValue>(() => {
     const count = lines.reduce((acc, l) => acc + (Number(l.qty) || 0), 0);
@@ -63,12 +89,39 @@ export function CartProvider({ children }: { children: ReactNode }) {
       (acc, l) => acc + (Number(l.qty) || 0) * (Number(l.product?.price) || 0),
       0
     );
-    const total = subtotal + subtotal * 0.15;
+    const savings = lines.reduce((acc, l) => {
+      const oldPrice = Number(l.product?.oldPrice);
+      const price = Number(l.product?.price);
+      if (oldPrice && oldPrice > price) {
+        return acc + (oldPrice - price) * (Number(l.qty) || 0);
+      }
+      return acc;
+    }, 0);
+    const originalSubtotal = subtotal + savings;
+
+    // Calculate coupon discount
+    const couponDiscount = coupon
+      ? coupon.percent
+        ? (subtotal * coupon.percent) / 100
+        : coupon.fixed
+        ? Math.min(subtotal, coupon.fixed)
+        : 0
+      : 0;
+
+    const subtotalAfterCoupon = Math.max(0, subtotal - couponDiscount);
+    const iva = subtotalAfterCoupon * 0.15;
+    const total = subtotalAfterCoupon + iva;
 
     return {
       lines,
       count,
       subtotal,
+      savings,
+      originalSubtotal,
+      coupon,
+      couponDiscount,
+      subtotalAfterCoupon,
+      iva,
       total,
       isOpen,
       setOpen,
@@ -106,12 +159,62 @@ export function CartProvider({ children }: { children: ReactNode }) {
       },
       clear: () => {
         setLines([]);
+        setCoupon(null);
         if (typeof window !== "undefined") {
           localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(COUPON_STORAGE_KEY);
         }
       },
+      applyCoupon: (rawCode: string) => {
+        const clean = rawCode.trim().toUpperCase();
+        if (!clean) {
+          toast.error("Ingresa un código", {
+            description: "Escribe un código de cupón para aplicar.",
+          });
+          return { success: false, message: "Por favor ingresa un código de cupón." };
+        }
+
+        let resolvedCoupon: AppliedCoupon | null = null;
+
+        if (clean === "BIENVENIDA" || clean === "ECUADOR") {
+          resolvedCoupon = { code: clean, percent: 10, label: "10% OFF" };
+        } else if (clean === "KRAKEDEV") {
+          resolvedCoupon = { code: clean, percent: 15, label: "15% OFF" };
+        } else if (clean === "PROMO5") {
+          resolvedCoupon = { code: clean, fixed: 5, label: "$5.00 OFF" };
+        } else {
+          // Check regex pattern: HYB10, HYB30, PROMO20, DESC15, etc.
+          const match = clean.match(/^(?:HYB|PROMO|DESC|HB)(\d{1,2})$/);
+          if (match && match[1]) {
+            const num = parseInt(match[1], 10);
+            if (num > 0 && num <= 80) {
+              resolvedCoupon = { code: clean, percent: num, label: `${num}% OFF` };
+            }
+          }
+        }
+
+        if (resolvedCoupon) {
+          setCoupon(resolvedCoupon);
+          toast.success(`¡Cupón "${clean}" aplicado!`, {
+            description: `Se aplicó un descuento de ${resolvedCoupon.label} a tu pedido.`,
+          });
+          return { success: true, message: `Cupón ${clean} aplicado con éxito.` };
+        } else {
+          toast.error("Cupón no válido", {
+            description: 'Prueba con códigos promocionales válidos como "HYB10" o "HYB30".',
+          });
+          return { success: false, message: "Código de cupón no válido." };
+        }
+      },
+      removeCoupon: () => {
+        setCoupon(null);
+        if (typeof window !== "undefined") {
+          localStorage.removeItem(COUPON_STORAGE_KEY);
+        }
+        toast.info("Cupón promocional removido");
+      },
     };
-  }, [lines, isOpen]);
+  }, [lines, coupon, isOpen]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
@@ -120,6 +223,12 @@ const defaultCart: CartContextValue = {
   lines: [],
   count: 0,
   subtotal: 0,
+  savings: 0,
+  originalSubtotal: 0,
+  coupon: null,
+  couponDiscount: 0,
+  subtotalAfterCoupon: 0,
+  iva: 0,
   total: 0,
   isOpen: false,
   setOpen: () => {},
@@ -128,6 +237,8 @@ const defaultCart: CartContextValue = {
   decrement: () => {},
   remove: () => {},
   clear: () => {},
+  applyCoupon: () => ({ success: false, message: "" }),
+  removeCoupon: () => {},
 };
 
 export function useCart() {

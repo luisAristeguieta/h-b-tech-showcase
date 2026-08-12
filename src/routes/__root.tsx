@@ -116,6 +116,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 import { CartProvider } from "../components/store/CartContext";
 import { ThemeProvider } from "../components/store/ThemeContext";
+import { FloatingSocialBar } from "../components/store/FloatingSocialBar";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -126,6 +127,7 @@ function RootComponent() {
         <CartProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
+          <FloatingSocialBar />
         </CartProvider>
       </ThemeProvider>
     </QueryClientProvider>

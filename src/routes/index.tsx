@@ -38,9 +38,9 @@ function Index() {
         <main>
           <Hero />
           <ValueBadges />
-          <MainShowcase />
-          <CategoryGrid />
           <FeaturedProducts />
+          <CategoryGrid />
+          <MainShowcase />
           <Testimonials />
         </main>
         <Footer />
