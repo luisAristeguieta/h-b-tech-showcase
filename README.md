@@ -43,20 +43,48 @@ Sigue estos pasos para ejecutar la aplicación en tu entorno local:
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/luisAristeguieta/h-b-tech-showcase.git
+git clone [https://github.com/luisAristeguieta/h-b-tech-showcase.git](https://github.com/luisAristeguieta/h-b-tech-showcase.git)
 cd h-b-tech-showcase
 
+### 2. Instalar dependencias
+```bash
+npm install
+```
+
+### 3. Ejecutar en modo desarrollo
+```bash
+npm run dev
+```
+
+---
+
+## 🎯 Direcciones del Proyecto
+
+| Sección | Ruta |
+| :--- | :--- |
+| **Home** | `/` |
+| **Catálogo** | `/catalogo` |
+| **Mi Cuenta / Login** | `/mi-cuenta` |
+| **Checkout** | `/mi-cuenta` (integrado) |
+| **Cotizar** | `/cotizar` |
+| **Acerca de** | `/acerca-de` |
+
+> ⚠️ **Importante:** El sitio opera como una **Aplicación de Página Única (SPA)**, por lo que todas las rutas están disponibles mediante React Router sin necesidad de recargar la página.
+
 ## 💻 Vista General y Comercio
+
 | Página de Inicio (Landing) | Catálogo de Productos |
 | :---: | :---: |
-| ![Landing Page](./docs/screenshots/home.png) | ![Catálogo](./docs/screenshots/catalog.png) |
+| ![Landing Page](docs/screenshots/home.png) | ![Catálogo](docs/screenshots/catalog.png) |
 
 ### 🛒 Detalle y Proceso de Compra
+
 | Detalle del Producto | Carrito de Compras |
 | :---: | :---: |
-| ![Detalle](./docs/screenshots/product-detail.png) | ![Carrito](./docs/screenshots/cart.png) |
+| ![Detalle](docs/screenshots/product-detail.png) | ![Carrito](docs/screenshots/cart.png) |
 
-### 🔐 Vista de Cliente / Usuario:
+### 👤 Vista de Cliente / Usuario:
+
 | Vista de Cliente |
 | :---: |
-| ![Cliente](./docs/screenshots/client-view.png) |
+| ![Cliente](docs/screenshots/client-view.png) |
